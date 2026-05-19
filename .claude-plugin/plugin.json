@@ -1,0 +1,16 @@
+{
+  "name": "youtube-watcher",
+  "version": "0.1.0",
+  "description": "Auto-plays the open YouTube tab while Claude Code works, pauses it and refocuses your terminal when Claude needs input.",
+  "author": {
+    "name": "도현"
+  },
+  "license": "MIT",
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "youtube",
+    "hooks",
+    "macos"
+  ]
+}

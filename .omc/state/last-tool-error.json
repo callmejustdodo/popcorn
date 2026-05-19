@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"osacompile -o /tmp/play-test.scpt /Users/dohyeonpark/claude-youtube-watcher/scripts/play.applescript && echo \\\"play.applescript OK\\\" && osacompile -o /tmp/pause-test.scpt /Users/dohyeonpar...",
+  "error": "Exit code 1\n/Users/dohyeonpark/claude-youtube-watcher/scripts/play.applescript:24: error: Expected end of line but found identifier. (-2741)",
+  "timestamp": "2026-05-19T18:46:13.764Z",
+  "retry_count": 1
+}
