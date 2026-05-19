@@ -18,23 +18,29 @@ There's no playlist or URL config — just keep a YouTube tab open in your brows
 
 ## Install
 
-The repo is a self-hosting Claude Code marketplace (`.claude-plugin/marketplace.json`). Two steps:
-
-```bash
-# 1) Clone the repo and validate (JSON, AppleScript syntax, executability)
-git clone https://github.com/callmejustdodo/popcorn.git
-cd popcorn
-./install.sh
-```
+Three slash commands inside Claude Code:
 
 ```text
-# 2) Register and install inside Claude Code (these are slash commands, not shell)
-/plugin marketplace add /path/to/popcorn
+/plugin marketplace add callmejustdodo/popcorn
 /plugin install popcorn@popcorn
 /reload-plugins
 ```
 
-You can also point the marketplace command directly at the GitHub URL: `/plugin marketplace add callmejustdodo/popcorn`.
+Claude Code clones the repo into `~/.claude/plugins/marketplaces/popcorn/` for you — no manual `git clone` needed.
+
+### From a local clone (only if you want to hack on it)
+
+```bash
+git clone https://github.com/callmejustdodo/popcorn.git
+cd popcorn
+./install.sh                                  # validates JSON + AppleScript syntax
+# then inside Claude Code:
+#   /plugin marketplace add /path/to/popcorn
+#   /plugin install popcorn@popcorn
+#   /reload-plugins
+```
+
+Note that `/plugin install` *copies* the repo into `~/.claude/plugins/cache/popcorn/popcorn/<version>/`, so edits to your clone don't reach the running plugin until you bump the version in `plugin.json` + `marketplace.json` and reinstall (or `cp` your edits into the cache manually).
 
 ### One-time browser setup
 
