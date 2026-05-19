@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"ls -la ~/.claude/installed_plugins.json ~/.claude/settings.json 2>&1\",\"description\":\"Check plugin manifest and settings paths\"}",
-  "error": "Exit code 2\n\"/Users/dohyeonpark/.claude/installed_plugins.json\": No such file or directory (os error 2)\n.rw-------@ 1.2k dohyeonpark 16 May 20:05 /Users/dohyeonpark/.claude/settings.json",
-  "timestamp": "2026-05-19T18:54:10.906Z",
-  "retry_count": 1
-}

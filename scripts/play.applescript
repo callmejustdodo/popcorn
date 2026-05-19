@@ -1,7 +1,9 @@
--- Finds the first YouTube tab in the given browser and resumes playback.
+-- Finds the first YouTube tab in the given browser, switches focus to it,
+-- and resumes playback. Pairs with pause.applescript which silently pauses
+-- without disturbing focus.
+--
 -- Usage: osascript play.applescript "Google Chrome"
--- Supports any Chromium-based browser (Google Chrome, Arc, Brave Browser, Microsoft Edge)
--- and Safari. Each requires "Allow JavaScript from Apple Events" enabled.
+-- Supports Chromium-based browsers (Chrome, Arc, Brave, Edge) and Safari.
 
 on run argv
 	if (count of argv) < 1 then
@@ -34,6 +36,9 @@ on playInChromium(browserName)
 							set tabURL to URL of tab j of window i
 							if tabURL contains "youtube.com" then
 								tell tab j of window i to execute javascript jsSnippet
+								set active tab index of window i to j
+								set index of window i to 1
+								activate
 								return
 							end if
 						end try
@@ -48,11 +53,16 @@ on playInSafari()
 	set jsSnippet to "(function(){var v=document.querySelector('video');if(v&&v.paused){v.play().catch(function(){});}return v?!v.paused:false;})();"
 	tell application "Safari"
 		try
-			repeat with w in windows
-				repeat with t in tabs of w
+			set windowCount to count of windows
+			repeat with i from 1 to windowCount
+				set tabCount to count of tabs of window i
+				repeat with j from 1 to tabCount
 					try
-						if (URL of t) contains "youtube.com" then
-							do JavaScript jsSnippet in t
+						if (URL of tab j of window i) contains "youtube.com" then
+							do JavaScript jsSnippet in tab j of window i
+							set current tab of window i to tab j of window i
+							set index of window i to 1
+							activate
 							return
 						end if
 					end try

@@ -8,8 +8,8 @@ macOS only. Works with Google Chrome (default), Arc, or Safari.
 
 | Event | Hook | Action |
 |---|---|---|
-| You submit a prompt | `UserPromptSubmit` | Remember the frontmost app (your terminal) and play any open YouTube tab |
-| Claude finishes responding | `Stop` | Pause the YouTube tab, re-activate the terminal |
+| You submit a prompt | `UserPromptSubmit` | Remember the frontmost app (your terminal), switch focus to the YouTube tab, raise its window, and resume playback |
+| Claude finishes responding | `Stop` | Pause the YouTube tab and re-activate the terminal |
 | Claude asks for input (e.g. permission prompt) | `Notification` | Same as `Stop` |
 
 There's no playlist or URL config — just keep a YouTube tab open in your browser and the plugin controls play/pause from there. "Always resume last video" comes for free because the video itself remembers its position.
