@@ -1,15 +1,8 @@
 # popcorn
 
-```
-              .-.   .-.   .-.
-            _(   )_(   )_(   )_
-           (                   )
-            \    .-.   .-.    /
-             \  (   ) (   )  /
-              \  '-'   '-'  /
-               '.         .'
-                 '-______-'
-```
+<p align="center">
+  <img src="assets/popcorn-hero.png" alt="A cute popcorn kernel with code-bracket motifs in the background" width="600">
+</p>
 
 Grab some popcorn while your CLI agent works.
 
