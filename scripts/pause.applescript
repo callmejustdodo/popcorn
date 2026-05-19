@@ -20,7 +20,9 @@ on run argv
 end run
 
 on pauseInChromium(browserName)
-	set jsSnippet to "(function(){var v=document.querySelector('video');if(v&&!v.paused){v.pause();}return v?v.paused:false;})();"
+	-- Pick the largest *visible* video element — Shorts pages keep hidden 0x0
+	-- video slots that querySelector('video') would otherwise grab.
+	set jsSnippet to "(function(){var v=Array.from(document.querySelectorAll('video')).filter(function(x){var r=x.getBoundingClientRect();return r.width>0&&r.height>0;}).sort(function(a,b){var ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();return rb.width*rb.height-ra.width*ra.height;})[0]||document.querySelector('video');if(v&&!v.paused){v.pause();}return v?v.paused:false;})();"
 	using terms from application "Google Chrome"
 		tell application browserName
 			try
@@ -43,7 +45,7 @@ on pauseInChromium(browserName)
 end pauseInChromium
 
 on pauseInSafari()
-	set jsSnippet to "(function(){var v=document.querySelector('video');if(v&&!v.paused){v.pause();}return v?v.paused:false;})();"
+	set jsSnippet to "(function(){var v=Array.from(document.querySelectorAll('video')).filter(function(x){var r=x.getBoundingClientRect();return r.width>0&&r.height>0;}).sort(function(a,b){var ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();return rb.width*rb.height-ra.width*ra.height;})[0]||document.querySelector('video');if(v&&!v.paused){v.pause();}return v?v.paused:false;})();"
 	tell application "Safari"
 		try
 			repeat with w in windows

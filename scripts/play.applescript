@@ -24,7 +24,9 @@ on run argv
 end run
 
 on playInChromium(browserName)
-	set jsSnippet to "(function(){var v=document.querySelector('video');if(v&&v.paused){v.play().catch(function(){});}return v?!v.paused:false;})();"
+	-- Pick the largest *visible* video element (Shorts pages have hidden 0x0 video
+	-- slots for ads / preloading; querySelector('video') would grab those).
+	set jsSnippet to "(function(){var v=Array.from(document.querySelectorAll('video')).filter(function(x){var r=x.getBoundingClientRect();return r.width>0&&r.height>0;}).sort(function(a,b){var ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();return rb.width*rb.height-ra.width*ra.height;})[0]||document.querySelector('video');if(v&&v.paused){v.play().catch(function(){});}return v?!v.paused:false;})();"
 	using terms from application "Google Chrome"
 		tell application browserName
 			try
@@ -50,7 +52,7 @@ on playInChromium(browserName)
 end playInChromium
 
 on playInSafari()
-	set jsSnippet to "(function(){var v=document.querySelector('video');if(v&&v.paused){v.play().catch(function(){});}return v?!v.paused:false;})();"
+	set jsSnippet to "(function(){var v=Array.from(document.querySelectorAll('video')).filter(function(x){var r=x.getBoundingClientRect();return r.width>0&&r.height>0;}).sort(function(a,b){var ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();return rb.width*rb.height-ra.width*ra.height;})[0]||document.querySelector('video');if(v&&v.paused){v.play().catch(function(){});}return v?!v.paused:false;})();"
 	tell application "Safari"
 		try
 			set windowCount to count of windows
