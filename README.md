@@ -1,5 +1,18 @@
 # popcorn
 
+```
+              . * .   . * .   . * .
+           *    .   *    .   *    .   *
+              ° * °   ° * °   ° * °
+             .---.---.---.---.---.
+            /| ░ |   | ░ |   | ░ |\
+           / |   | ░ |   | ░ |   | \
+          /  | ░ |   | ░ |   | ░ |  \
+         /   |   | ░ |   | ░ |   |   \
+         |  P   O   P   C   O   R   N  |
+         '-----------------------------'
+```
+
 Grab some popcorn while your CLI agent works.
 
 A Claude Code plugin that **auto-plays the open YouTube tab while the agent is working** and **pauses it the moment the agent needs your input** — then refocuses your terminal so you don't miss the prompt. Designed to extend to TikTok / Instagram and other CLI agents (Codex, etc.) later.
