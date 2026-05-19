@@ -20,7 +20,9 @@ macOS only. Works with Google Chrome (default), Arc, or Safari.
 
 There's no playlist or URL config — just keep a YouTube tab open in your browser and the plugin controls play/pause from there. "Always resume last video" comes for free because the video itself remembers its position.
 
-## Install
+## Setup
+
+### 1. Install the plugin
 
 Three slash commands inside Claude Code:
 
@@ -32,7 +34,7 @@ Three slash commands inside Claude Code:
 
 Claude Code clones the repo into `~/.claude/plugins/marketplaces/popcorn/` for you — no manual `git clone` needed.
 
-### ⚠️ Required: enable JavaScript from Apple Events
+### 2. Enable JavaScript from Apple Events in your browser
 
 > [!IMPORTANT]
 > Without this setting, the plugin silently does nothing. AppleScript can't drive a browser tab until you grant it permission once per browser.
@@ -42,7 +44,7 @@ Claude Code clones the repo into `~/.claude/plugins/marketplaces/popcorn/` for y
 
 The first time the script actually pokes a tab, the browser pops one more "Allow this app to control [browser]?" prompt. Click **Allow** there too.
 
-### Use Arc (or Safari / Brave / Edge) instead of Chrome
+### 3. (Optional) Use Arc / Safari / Brave / Edge instead of Chrome
 
 Set the browser app name via env var in your shell rc:
 
@@ -55,7 +57,7 @@ export CLAUDE_YOUTUBE_BROWSER="Arc"             # Arc
 # export CLAUDE_YOUTUBE_BROWSER="Microsoft Edge" # Edge
 ```
 
-Then `source ~/.zshrc` (or open a new terminal) and restart Claude Code so the hooks read the new value. Make sure JS-from-Apple-Events is enabled in your chosen browser too (see above).
+Then `source ~/.zshrc` (or open a new terminal) and restart Claude Code so the hooks read the new value. Make sure JS-from-Apple-Events is enabled in your chosen browser too (see step 2).
 
 ## Usage
 
