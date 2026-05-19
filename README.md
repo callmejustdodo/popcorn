@@ -89,21 +89,6 @@ Or run `/popcorn:watch-toggle` from inside Claude Code.
 - `/popcorn:watch <youtube-url>` — opens the URL in your configured browser.
 - `/popcorn:watch-toggle` — flip the kill switch.
 
-## Files
-
-```
-.claude-plugin/plugin.json       plugin manifest
-.claude-plugin/marketplace.json  self-hosting marketplace manifest
-hooks/hooks.json                 registers UserPromptSubmit / Stop / Notification hooks
-scripts/on-prompt.sh             saves frontmost app, plays YouTube, focuses Chrome
-scripts/on-stop.sh               pauses YouTube, restores frontmost app
-scripts/play.applescript         finds the largest visible YouTube <video> and resumes
-scripts/pause.applescript        finds the largest visible YouTube <video> and pauses
-commands/watch.md                /popcorn:watch slash command
-commands/watch-toggle.md         /popcorn:watch-toggle slash command
-install.sh                       repo validator + install-instructions printer
-```
-
 ## Troubleshooting
 
 - **Nothing happens** — the most common cause is forgetting the "Allow JavaScript from Apple Events" setting. Verify by running the script manually: `osascript scripts/pause.applescript "Google Chrome"`. If your video doesn't actually pause, the setting isn't applied yet.
