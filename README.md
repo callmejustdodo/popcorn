@@ -6,15 +6,13 @@
 
 Grab some popcorn while your CLI agent works.
 
-A Claude Code plugin that **auto-plays the open YouTube tab while the agent is working** and **pauses it the moment the agent needs your input** — then refocuses your terminal so you don't miss the prompt. Designed to extend to TikTok / Instagram and other CLI agents (Codex, etc.) later.
-
-macOS only. Works with Google Chrome (default), Arc, or Safari.
+A Claude Code plugin that auto-plays the open YouTube tab while the agent is working and pauses it the moment the agent needs your input — then refocuses your terminal. macOS only. Works with Chrome (default), Arc, Brave, Edge, and Safari.
 
 ## Setup
 
-### 1. Install the plugin
+### 1. Install
 
-Three slash commands inside Claude Code:
+Inside Claude Code:
 
 ```text
 /plugin marketplace add callmejustdodo/popcorn
@@ -22,73 +20,49 @@ Three slash commands inside Claude Code:
 /reload-plugins
 ```
 
-Claude Code clones the repo into `~/.claude/plugins/marketplaces/popcorn/` for you — no manual `git clone` needed.
-
-### 2. Enable JavaScript from Apple Events in your browser
+### 2. Allow AppleScript to drive your browser
 
 > [!IMPORTANT]
-> Without this setting, the plugin silently does nothing. AppleScript can't drive a browser tab until you grant it permission once per browser.
+> Without this, the plugin silently does nothing. One-time setup per browser.
 
-- **Google Chrome / Arc / Brave / Edge** — bring the browser to the front, then in the macOS menu bar at the top of the screen: `View → Developer → Allow JavaScript from Apple Events`. Click **Allow** on the confirmation prompt, then restart the browser.
-- **Safari** — `Safari → Settings → Advanced → Show Develop menu`, then `Develop → Allow JavaScript from Apple Events`.
+**Chrome / Arc / Brave / Edge** — bring the browser to the front, then in the macOS menu bar: `View → Developer → Allow JavaScript from Apple Events`. Click **Allow**, restart the browser.
 
-The first time the script actually pokes a tab, the browser pops one more "Allow this app to control [browser]?" prompt. Click **Allow** there too.
+**Safari** — `Safari → Settings → Advanced → Show Develop menu`, then `Develop → Allow JavaScript from Apple Events`.
 
-### 3. (Optional) Pick a different browser
+The first time the plugin controls a tab, the browser asks one more permission. Click **Allow** there too.
 
-Default is Google Chrome. Switch via slash command:
+### 3. (Optional) Use a non-Chrome browser
 
 ```text
 /popcorn:browser arc       # or: chrome, safari, brave, edge
-/popcorn:browser           # no argument → prints the current setting
+/popcorn:browser           # show current setting
 ```
 
-The choice is written to `~/.claude/.popcorn-browser` and read by the hooks on every prompt — no restart required. Make sure JS-from-Apple-Events is enabled in your chosen browser too (see step 2).
+## How to use
 
-Advanced: setting `POPCORN_BROWSER` as a shell env var still works and takes precedence over the config file.
+1. Open a YouTube video or Short in your browser (or run `/popcorn:watch <url>`).
+2. Send a prompt — video plays, browser jumps to the front.
+3. Claude finishes or asks for input — video pauses, your terminal comes back.
 
-## Usage
+## Commands
 
-1. Open any YouTube video or Short in your browser. (Or `/popcorn:watch <url>` once the plugin is loaded.)
-2. Submit a prompt to Claude — the video auto-plays and your browser jumps to the front.
-3. The instant Claude finishes or asks for permission, the video pauses and your terminal jumps back to the front.
-
-Shorts work too — the selector picks the largest *visible* `<video>` element, so the hidden preload slots don't get controlled by mistake.
-
-## Configuration
-
-Environment variables (set in your shell rc):
-
-| Var | Default | What it does |
-|---|---|---|
-| `CLAUDE_YOUTUBE_BROWSER` | `Google Chrome` | App name to control. Try `"Safari"`, `"Arc"`, `"Brave Browser"`, or `"Microsoft Edge"`. |
-
-Kill switch (no restart needed):
-
-```bash
-touch ~/.claude/.popcorn-disabled   # disable
-rm    ~/.claude/.popcorn-disabled   # re-enable
-```
-
-Or run `/popcorn:watch-toggle` from inside Claude Code.
-
-## Slash commands
-
-- `/popcorn:watch <youtube-url>` — opens the URL in your configured browser.
-- `/popcorn:watch-toggle` — flip the kill switch.
+| Command | What it does |
+|---|---|
+| `/popcorn:watch <url>` | Open a YouTube URL in your configured browser |
+| `/popcorn:browser <name>` | Switch browser (`chrome`, `arc`, `safari`, `brave`, `edge`) |
+| `/popcorn:watch-toggle` | Temporarily disable / re-enable the plugin |
 
 ## Troubleshooting
 
-- **Nothing happens** — the most common cause is forgetting the "Allow JavaScript from Apple Events" setting. Verify by running the script manually: `osascript scripts/pause.applescript "Google Chrome"`. If your video doesn't actually pause, the setting isn't applied yet.
-- **The wrong app gets focused after pause** — the plugin saves whichever app was frontmost the instant you press Enter. If you alt-tab to the browser before submitting, the browser is what it'll remember. Hit Enter from your terminal.
-- **Multiple YouTube tabs open** — the plugin controls the first one it finds. Close the ones you don't want auto-controlled.
-- **Shorts don't pause/play** — fixed in v0.2.0 (the plugin now picks the largest *visible* `<video>` element so the hidden preload slots are ignored). Make sure you're on at least that version.
+- **Nothing happens** → "Allow JavaScript from Apple Events" isn't enabled yet. Verify with `osascript scripts/pause.applescript "Google Chrome"` — if your video doesn't pause, the setting isn't applied.
+- **Wrong app gets focused after pause** → the plugin remembers whatever was frontmost when you pressed Enter. Submit prompts from your terminal, not from the browser.
+- **Multiple YouTube tabs** → the plugin controls the first one it finds. Close the others.
 
 ## Roadmap
 
-- TikTok / Instagram Reels support (same AppleScript-into-browser-tab pattern, different selectors)
-- Codex CLI adapter (Claude Code's hook protocol doesn't apply; needs a pty / stdout watcher)
-- Multi-tab round-robin so you don't end up on the same Short every prompt
+- TikTok / Instagram Reels (same AppleScript-into-browser pattern, different selectors)
+- Codex CLI adapter (no native hooks — needs a pty / stdout watcher)
+- Multi-tab round-robin
 
 ## License
 
