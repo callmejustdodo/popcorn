@@ -1,4 +1,4 @@
-<p align="center">
+<p align="left">
   <img src="assets/popcorn-hero.png" alt="A minimalist popcorn kernel illustration" width="200">
 </p>
 
