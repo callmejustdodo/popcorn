@@ -10,16 +10,6 @@ A Claude Code plugin that **auto-plays the open YouTube tab while the agent is w
 
 macOS only. Works with Google Chrome (default), Arc, or Safari.
 
-## How it works
-
-| Event | Hook | Action |
-|---|---|---|
-| You submit a prompt | `UserPromptSubmit` | Remember the frontmost app (your terminal), switch focus to the YouTube tab, raise its window, and resume playback |
-| Claude finishes responding | `Stop` | Pause the YouTube tab and re-activate the terminal |
-| Claude asks for input (e.g. permission prompt) | `Notification` | Same as `Stop` |
-
-There's no playlist or URL config — just keep a YouTube tab open in your browser and the plugin controls play/pause from there. "Always resume last video" comes for free because the video itself remembers its position.
-
 ## Setup
 
 ### 1. Install the plugin
