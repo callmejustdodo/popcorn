@@ -3,7 +3,13 @@
 # Silently no-ops if no YouTube tab is open or AppleScript is unavailable.
 
 PLUGIN_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-BROWSER="${CLAUDE_YOUTUBE_BROWSER:-Google Chrome}"
+BROWSER_CONFIG="$HOME/.claude/.popcorn-browser"
+if [ -n "$POPCORN_BROWSER" ]; then
+  BROWSER="$POPCORN_BROWSER"
+elif [ -f "$BROWSER_CONFIG" ]; then
+  BROWSER=$(cat "$BROWSER_CONFIG" 2>/dev/null)
+fi
+BROWSER="${BROWSER:-Google Chrome}"
 STATE_DIR="${TMPDIR:-/tmp}"
 FRONT_APP_FILE="$STATE_DIR/popcorn-frontapp"
 DISABLED_FILE="$HOME/.claude/.popcorn-disabled"

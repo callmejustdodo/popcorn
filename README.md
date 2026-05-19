@@ -44,20 +44,18 @@ Claude Code clones the repo into `~/.claude/plugins/marketplaces/popcorn/` for y
 
 The first time the script actually pokes a tab, the browser pops one more "Allow this app to control [browser]?" prompt. Click **Allow** there too.
 
-### 3. (Optional) Use Arc / Safari / Brave / Edge instead of Chrome
+### 3. (Optional) Pick a different browser
 
-Set the browser app name via env var in your shell rc:
+Default is Google Chrome. Switch via slash command:
 
-```bash
-# add to ~/.zshrc (or ~/.bashrc)
-export CLAUDE_YOUTUBE_BROWSER="Arc"             # Arc
-# or:
-# export CLAUDE_YOUTUBE_BROWSER="Safari"         # Safari
-# export CLAUDE_YOUTUBE_BROWSER="Brave Browser"  # Brave
-# export CLAUDE_YOUTUBE_BROWSER="Microsoft Edge" # Edge
+```text
+/popcorn:browser arc       # or: chrome, safari, brave, edge
+/popcorn:browser           # no argument → prints the current setting
 ```
 
-Then `source ~/.zshrc` (or open a new terminal) and restart Claude Code so the hooks read the new value. Make sure JS-from-Apple-Events is enabled in your chosen browser too (see step 2).
+The choice is written to `~/.claude/.popcorn-browser` and read by the hooks on every prompt — no restart required. Make sure JS-from-Apple-Events is enabled in your chosen browser too (see step 2).
+
+Advanced: setting `POPCORN_BROWSER` as a shell env var still works and takes precedence over the config file.
 
 ## Usage
 

@@ -9,7 +9,7 @@
     {
       "name": "popcorn",
       "description": "Auto-plays the open YouTube tab while Claude Code works, pauses it and refocuses your terminal when Claude needs input.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "author": {
         "name": "도현"
       },
@@ -23,5 +23,5 @@
       ]
     }
   ],
-  "version": "0.2.0"
+  "version": "0.3.0"
 }
