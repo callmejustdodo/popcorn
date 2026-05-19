@@ -2,3 +2,4 @@
 *.swp
 *.log
 node_modules/
+.omc/
