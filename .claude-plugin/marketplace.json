@@ -1,0 +1,27 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-youtube-watcher",
+  "description": "Local marketplace hosting the youtube-watcher plugin",
+  "owner": {
+    "name": "도현"
+  },
+  "plugins": [
+    {
+      "name": "youtube-watcher",
+      "description": "Auto-plays the open YouTube tab while Claude Code works, pauses it and refocuses your terminal when Claude needs input.",
+      "version": "0.1.0",
+      "author": {
+        "name": "도현"
+      },
+      "source": "./",
+      "category": "productivity",
+      "tags": [
+        "youtube",
+        "hooks",
+        "macos",
+        "applescript"
+      ]
+    }
+  ],
+  "version": "0.1.0"
+}

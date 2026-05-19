@@ -1,32 +1,56 @@
 #!/bin/bash
-# One-shot installer: symlinks this repo into ~/.claude/plugins/youtube-watcher
-# so Claude Code picks up the hooks. Re-running is safe.
+# Installer for youtube-watcher.
+#
+# Claude Code loads plugins through marketplaces, so this repo includes a
+# self-hosting `marketplace.json`. Run this script first to validate the
+# repo, then finish the install with the two slash commands printed at
+# the end (they have to be run inside Claude Code itself).
 
 set -e
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
-TARGET="$HOME/.claude/plugins/youtube-watcher"
 
-mkdir -p "$HOME/.claude/plugins"
+# Sanity check the manifest files
+for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json hooks/hooks.json; do
+  if ! python3 -c "import json; json.load(open('$REPO_DIR/$f'))" >/dev/null 2>&1; then
+    echo "Error: invalid JSON at $f" >&2
+    exit 1
+  fi
+done
 
-if [ -L "$TARGET" ]; then
-  echo "Removing existing symlink: $TARGET"
-  rm "$TARGET"
-elif [ -e "$TARGET" ]; then
-  echo "Error: $TARGET exists and is not a symlink. Move or delete it first." >&2
-  exit 1
-fi
+# Compile AppleScripts to catch syntax errors before Claude Code does
+for f in scripts/play.applescript scripts/pause.applescript; do
+  if ! osacompile -o /tmp/.youtube-watcher-syntax.scpt "$REPO_DIR/$f" 2>/dev/null; then
+    echo "Error: AppleScript syntax error in $f" >&2
+    rm -f /tmp/.youtube-watcher-syntax.scpt
+    exit 1
+  fi
+done
+rm -f /tmp/.youtube-watcher-syntax.scpt
 
-ln -s "$REPO_DIR" "$TARGET"
+# Make shell hook scripts executable
 chmod +x "$REPO_DIR"/scripts/*.sh
 
-echo "Installed: $TARGET -> $REPO_DIR"
-echo
-echo "Next steps:"
-echo "  1) Enable JS-from-AppleEvents in your browser (one-time):"
-echo "       Chrome/Arc: View > Developer > 'Allow JavaScript from Apple Events'"
-echo "       Safari:     enable Develop menu, then Develop > 'Allow JavaScript from Apple Events'"
-echo "  2) Restart Claude Code so it loads the new plugin hooks."
-echo "  3) Open a YouTube video in your browser (or run '/watch <url>')."
-echo
-echo "Override the browser via env var, e.g.:  export CLAUDE_YOUTUBE_BROWSER='Safari'"
+# Clean up any stale symlink from previous installs (no longer needed)
+STALE_LINK="$HOME/.claude/plugins/youtube-watcher"
+if [ -L "$STALE_LINK" ]; then
+  rm "$STALE_LINK"
+fi
+
+cat <<EOF
+youtube-watcher repo validated at: $REPO_DIR
+
+Finish the install inside Claude Code (these are slash commands, not shell):
+
+    /plugin marketplace add $REPO_DIR
+    /plugin install youtube-watcher@claude-youtube-watcher
+
+Then once per browser, enable JS-from-AppleEvents:
+    Chrome / Arc: View > Developer > 'Allow JavaScript from Apple Events'
+    Safari:       enable Develop menu, then Develop > 'Allow JavaScript from Apple Events'
+
+Restart Claude Code after installing so the hooks are registered.
+
+To target a non-Chrome browser, set in your shell rc:
+    export CLAUDE_YOUTUBE_BROWSER='Safari'   # or 'Arc', 'Brave Browser', ...
+EOF

@@ -16,13 +16,21 @@ There's no playlist or URL config — just keep a YouTube tab open in your brows
 
 ## Install
 
+The repo is a self-hosting Claude Code marketplace (`.claude-plugin/marketplace.json`), so install is two steps:
+
 ```bash
-git clone <this-repo> ~/dev/claude-youtube-watcher    # or wherever
-cd ~/dev/claude-youtube-watcher
+# 1) Validate the repo (JSON, AppleScript syntax, executability)
+cd /path/to/claude-youtube-watcher
 ./install.sh
 ```
 
-The installer symlinks the repo into `~/.claude/plugins/youtube-watcher` and makes the hook scripts executable.
+```text
+# 2) Register and install inside Claude Code (these are slash commands)
+/plugin marketplace add /path/to/claude-youtube-watcher
+/plugin install youtube-watcher@claude-youtube-watcher
+```
+
+Restart Claude Code after installing so the hooks are picked up.
 
 ### One-time browser setup
 

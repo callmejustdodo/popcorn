@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"osacompile -o /tmp/play-test.scpt /Users/dohyeonpark/claude-youtube-watcher/scripts/play.applescript && echo \\\"play.applescript OK\\\" && osacompile -o /tmp/pause-test.scpt /Users/dohyeonpar...",
-  "error": "Exit code 1\n/Users/dohyeonpark/claude-youtube-watcher/scripts/play.applescript:24: error: Expected end of line but found identifier. (-2741)",
-  "timestamp": "2026-05-19T18:46:13.764Z",
+  "tool_input_preview": "{\"command\":\"ls -la ~/.claude/installed_plugins.json ~/.claude/settings.json 2>&1\",\"description\":\"Check plugin manifest and settings paths\"}",
+  "error": "Exit code 2\n\"/Users/dohyeonpark/.claude/installed_plugins.json\": No such file or directory (os error 2)\n.rw-------@ 1.2k dohyeonpark 16 May 20:05 /Users/dohyeonpark/.claude/settings.json",
+  "timestamp": "2026-05-19T18:54:10.906Z",
   "retry_count": 1
 }
