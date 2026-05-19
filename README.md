@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="assets/popcorn-hero.png" alt="A minimalist popcorn kernel illustration" width="200">
+  <img src="assets/popcorn-hero.png" alt="Pop-art-style popcorn kernel illustration" width="150">
 </p>
 
 # popcorn
