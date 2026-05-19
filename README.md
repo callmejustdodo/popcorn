@@ -1,8 +1,8 @@
-# popcorn
-
 <p align="center">
-  <img src="assets/popcorn-hero.png" alt="A cute popcorn kernel with code-bracket motifs in the background" width="600">
+  <img src="assets/popcorn-hero.png" alt="A minimalist popcorn kernel illustration" width="200">
 </p>
+
+# popcorn
 
 Grab some popcorn while your CLI agent works.
 
@@ -32,33 +32,35 @@ Three slash commands inside Claude Code:
 
 Claude Code clones the repo into `~/.claude/plugins/marketplaces/popcorn/` for you — no manual `git clone` needed.
 
-### From a local clone (only if you want to hack on it)
+### ⚠️ Required: enable JavaScript from Apple Events
 
-```bash
-git clone https://github.com/callmejustdodo/popcorn.git
-cd popcorn
-./install.sh                                  # validates JSON + AppleScript syntax
-# then inside Claude Code:
-#   /plugin marketplace add /path/to/popcorn
-#   /plugin install popcorn@popcorn
-#   /reload-plugins
-```
+> [!IMPORTANT]
+> Without this setting, the plugin silently does nothing. AppleScript can't drive a browser tab until you grant it permission once per browser.
 
-Note that `/plugin install` *copies* the repo into `~/.claude/plugins/cache/popcorn/popcorn/<version>/`, so edits to your clone don't reach the running plugin until you bump the version in `plugin.json` + `marketplace.json` and reinstall (or `cp` your edits into the cache manually).
-
-### One-time browser setup
-
-The plugin pauses/plays by injecting a one-liner into the YouTube tab via AppleScript, which Chrome/Safari block by default. Enable it once per browser:
-
-- **Chrome / Arc** — `View → Developer → Allow JavaScript from Apple Events` (you'll get a one-time confirmation prompt). Restart the browser.
+- **Google Chrome / Arc / Brave / Edge** — bring the browser to the front, then in the macOS menu bar at the top of the screen: `View → Developer → Allow JavaScript from Apple Events`. Click **Allow** on the confirmation prompt, then restart the browser.
 - **Safari** — `Safari → Settings → Advanced → Show Develop menu`, then `Develop → Allow JavaScript from Apple Events`.
 
-The first time the AppleScript actually pokes a tab, the browser shows a second "Allow this app to control Chrome?" prompt — click Allow there too.
+The first time the script actually pokes a tab, the browser pops one more "Allow this app to control [browser]?" prompt. Click **Allow** there too.
+
+### Use Arc (or Safari / Brave / Edge) instead of Chrome
+
+Set the browser app name via env var in your shell rc:
+
+```bash
+# add to ~/.zshrc (or ~/.bashrc)
+export CLAUDE_YOUTUBE_BROWSER="Arc"             # Arc
+# or:
+# export CLAUDE_YOUTUBE_BROWSER="Safari"         # Safari
+# export CLAUDE_YOUTUBE_BROWSER="Brave Browser"  # Brave
+# export CLAUDE_YOUTUBE_BROWSER="Microsoft Edge" # Edge
+```
+
+Then `source ~/.zshrc` (or open a new terminal) and restart Claude Code so the hooks read the new value. Make sure JS-from-Apple-Events is enabled in your chosen browser too (see above).
 
 ## Usage
 
 1. Open any YouTube video or Short in your browser. (Or `/popcorn:watch <url>` once the plugin is loaded.)
-2. Submit a prompt to Claude — the video auto-plays and Chrome jumps to the front.
+2. Submit a prompt to Claude — the video auto-plays and your browser jumps to the front.
 3. The instant Claude finishes or asks for permission, the video pauses and your terminal jumps back to the front.
 
 Shorts work too — the selector picks the largest *visible* `<video>` element, so the hidden preload slots don't get controlled by mistake.
