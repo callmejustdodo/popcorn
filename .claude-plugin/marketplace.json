@@ -1,15 +1,15 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "claude-youtube-watcher",
-  "description": "Local marketplace hosting the youtube-watcher plugin",
+  "name": "popcorn",
+  "description": "Watch something while your CLI agent works. Currently ships the popcorn plugin (YouTube via AppleScript).",
   "owner": {
     "name": "도현"
   },
   "plugins": [
     {
-      "name": "youtube-watcher",
+      "name": "popcorn",
       "description": "Auto-plays the open YouTube tab while Claude Code works, pauses it and refocuses your terminal when Claude needs input.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "author": {
         "name": "도현"
       },
@@ -23,5 +23,5 @@
       ]
     }
   ],
-  "version": "0.1.0"
+  "version": "0.2.0"
 }

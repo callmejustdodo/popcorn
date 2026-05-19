@@ -1,17 +1,17 @@
 ---
-description: Temporarily disable or re-enable the youtube-watcher hooks
+description: Temporarily disable or re-enable the popcorn hooks
 allowed-tools: Bash
 ---
 
-Toggle the youtube-watcher plugin by creating or removing the kill-switch file:
+Toggle the popcorn plugin by creating or removing the kill-switch file:
 
 ```
-if [ -f "$HOME/.claude/.youtube-watcher-disabled" ]; then
-  rm "$HOME/.claude/.youtube-watcher-disabled"
-  echo "youtube-watcher: ENABLED"
+if [ -f "$HOME/.claude/.popcorn-disabled" ]; then
+  rm "$HOME/.claude/.popcorn-disabled"
+  echo "popcorn: ENABLED"
 else
-  touch "$HOME/.claude/.youtube-watcher-disabled"
-  echo "youtube-watcher: DISABLED"
+  touch "$HOME/.claude/.popcorn-disabled"
+  echo "popcorn: DISABLED"
 fi
 ```
 

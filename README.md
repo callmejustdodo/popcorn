@@ -1,6 +1,8 @@
-# claude-youtube-watcher
+# popcorn
 
-A Claude Code plugin that **plays YouTube while Claude is working** and **pauses it the moment Claude needs your input** — then refocuses your terminal so you don't miss the prompt.
+Grab some popcorn while your CLI agent works.
+
+A Claude Code plugin that **auto-plays the open YouTube tab while the agent is working** and **pauses it the moment the agent needs your input** — then refocuses your terminal so you don't miss the prompt. Designed to extend to TikTok / Instagram and other CLI agents (Codex, etc.) later.
 
 macOS only. Works with Google Chrome (default), Arc, or Safari.
 
@@ -16,21 +18,23 @@ There's no playlist or URL config — just keep a YouTube tab open in your brows
 
 ## Install
 
-The repo is a self-hosting Claude Code marketplace (`.claude-plugin/marketplace.json`), so install is two steps:
+The repo is a self-hosting Claude Code marketplace (`.claude-plugin/marketplace.json`). Two steps:
 
 ```bash
-# 1) Validate the repo (JSON, AppleScript syntax, executability)
-cd /path/to/claude-youtube-watcher
+# 1) Clone the repo and validate (JSON, AppleScript syntax, executability)
+git clone https://github.com/callmejustdodo/popcorn.git
+cd popcorn
 ./install.sh
 ```
 
 ```text
-# 2) Register and install inside Claude Code (these are slash commands)
-/plugin marketplace add /path/to/claude-youtube-watcher
-/plugin install youtube-watcher@claude-youtube-watcher
+# 2) Register and install inside Claude Code (these are slash commands, not shell)
+/plugin marketplace add /path/to/popcorn
+/plugin install popcorn@popcorn
+/reload-plugins
 ```
 
-Restart Claude Code after installing so the hooks are picked up.
+You can also point the marketplace command directly at the GitHub URL: `/plugin marketplace add callmejustdodo/popcorn`.
 
 ### One-time browser setup
 
@@ -39,13 +43,15 @@ The plugin pauses/plays by injecting a one-liner into the YouTube tab via AppleS
 - **Chrome / Arc** — `View → Developer → Allow JavaScript from Apple Events` (you'll get a one-time confirmation prompt). Restart the browser.
 - **Safari** — `Safari → Settings → Advanced → Show Develop menu`, then `Develop → Allow JavaScript from Apple Events`.
 
-Restart Claude Code after installing so it picks up the new hooks.
+The first time the AppleScript actually pokes a tab, the browser shows a second "Allow this app to control Chrome?" prompt — click Allow there too.
 
 ## Usage
 
-1. Open any YouTube video in your browser. (Or `/watch <url>` once the plugin is loaded.)
-2. Submit a prompt to Claude — the video auto-plays.
+1. Open any YouTube video or Short in your browser. (Or `/popcorn:watch <url>` once the plugin is loaded.)
+2. Submit a prompt to Claude — the video auto-plays and Chrome jumps to the front.
 3. The instant Claude finishes or asks for permission, the video pauses and your terminal jumps back to the front.
+
+Shorts work too — the selector picks the largest *visible* `<video>` element, so the hidden preload slots don't get controlled by mistake.
 
 ## Configuration
 
@@ -53,42 +59,49 @@ Environment variables (set in your shell rc):
 
 | Var | Default | What it does |
 |---|---|---|
-| `CLAUDE_YOUTUBE_BROWSER` | `Google Chrome` | App name to control. Try `"Safari"` or `"Arc"`. |
+| `CLAUDE_YOUTUBE_BROWSER` | `Google Chrome` | App name to control. Try `"Safari"`, `"Arc"`, `"Brave Browser"`, or `"Microsoft Edge"`. |
 
 Kill switch (no restart needed):
 
 ```bash
-touch ~/.claude/.youtube-watcher-disabled   # disable
-rm    ~/.claude/.youtube-watcher-disabled   # re-enable
+touch ~/.claude/.popcorn-disabled   # disable
+rm    ~/.claude/.popcorn-disabled   # re-enable
 ```
 
-Or run `/watch-toggle` from inside Claude Code.
+Or run `/popcorn:watch-toggle` from inside Claude Code.
 
 ## Slash commands
 
-- `/watch <youtube-url>` — opens the URL in your configured browser.
-- `/watch-toggle` — flip the kill switch.
+- `/popcorn:watch <youtube-url>` — opens the URL in your configured browser.
+- `/popcorn:watch-toggle` — flip the kill switch.
 
 ## Files
 
 ```
-.claude-plugin/plugin.json   plugin manifest
-hooks/hooks.json             registers UserPromptSubmit / Stop / Notification hooks
-scripts/on-prompt.sh         saves frontmost app, plays YouTube
-scripts/on-stop.sh           pauses YouTube, restores frontmost app
-scripts/play.applescript     finds YouTube tab and calls video.play()
-scripts/pause.applescript    finds YouTube tab and calls video.pause()
-commands/watch.md            /watch slash command
-commands/watch-toggle.md     /watch-toggle slash command
-install.sh                   symlinks into ~/.claude/plugins/
+.claude-plugin/plugin.json       plugin manifest
+.claude-plugin/marketplace.json  self-hosting marketplace manifest
+hooks/hooks.json                 registers UserPromptSubmit / Stop / Notification hooks
+scripts/on-prompt.sh             saves frontmost app, plays YouTube, focuses Chrome
+scripts/on-stop.sh               pauses YouTube, restores frontmost app
+scripts/play.applescript         finds the largest visible YouTube <video> and resumes
+scripts/pause.applescript        finds the largest visible YouTube <video> and pauses
+commands/watch.md                /popcorn:watch slash command
+commands/watch-toggle.md         /popcorn:watch-toggle slash command
+install.sh                       repo validator + install-instructions printer
 ```
 
 ## Troubleshooting
 
-- **Nothing happens** — the most common cause is forgetting the "Allow JavaScript from Apple Events" setting. Verify by running the script manually: `osascript scripts/pause.applescript "Google Chrome"`. If you see an error about JavaScript not being allowed, that's it.
-- **The wrong app gets focused after pause** — make sure your terminal app (Ghostty, iTerm2, Terminal, Warp, …) is what's frontmost *at the moment you press Enter*. The plugin captures that and restores it. If you alt-tab to the browser before submitting, the browser is what it'll remember.
+- **Nothing happens** — the most common cause is forgetting the "Allow JavaScript from Apple Events" setting. Verify by running the script manually: `osascript scripts/pause.applescript "Google Chrome"`. If your video doesn't actually pause, the setting isn't applied yet.
+- **The wrong app gets focused after pause** — the plugin saves whichever app was frontmost the instant you press Enter. If you alt-tab to the browser before submitting, the browser is what it'll remember. Hit Enter from your terminal.
 - **Multiple YouTube tabs open** — the plugin controls the first one it finds. Close the ones you don't want auto-controlled.
-- **It plays during a long response with no interaction**, but I expected silence — every `UserPromptSubmit` resumes the video; every `Stop` pauses it. That's by design (you're working ↔ Claude is working).
+- **Shorts don't pause/play** — fixed in v0.2.0 (the plugin now picks the largest *visible* `<video>` element so the hidden preload slots are ignored). Make sure you're on at least that version.
+
+## Roadmap
+
+- TikTok / Instagram Reels support (same AppleScript-into-browser-tab pattern, different selectors)
+- Codex CLI adapter (Claude Code's hook protocol doesn't apply; needs a pty / stdout watcher)
+- Multi-tab round-robin so you don't end up on the same Short every prompt
 
 ## License
 

@@ -5,8 +5,8 @@
 PLUGIN_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BROWSER="${CLAUDE_YOUTUBE_BROWSER:-Google Chrome}"
 STATE_DIR="${TMPDIR:-/tmp}"
-FRONT_APP_FILE="$STATE_DIR/claude-youtube-frontapp"
-DISABLED_FILE="$HOME/.claude/.youtube-watcher-disabled"
+FRONT_APP_FILE="$STATE_DIR/popcorn-frontapp"
+DISABLED_FILE="$HOME/.claude/.popcorn-disabled"
 
 [ -f "$DISABLED_FILE" ] && exit 0
 command -v osascript >/dev/null 2>&1 || exit 0
