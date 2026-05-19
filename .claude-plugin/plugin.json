@@ -1,7 +1,7 @@
 {
   "name": "popcorn",
-  "version": "0.3.0",
-  "description": "Auto-plays the open YouTube tab while Claude Code works, pauses it and refocuses your terminal when Claude needs input. Built to extend to TikTok / Instagram and other CLIs.",
+  "version": "0.4.0",
+  "description": "Auto-plays the open YouTube / TikTok / Instagram tab while Claude Code works, pauses it and refocuses your terminal when Claude needs input.",
   "author": {
     "name": "도현"
   },

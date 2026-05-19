@@ -1,6 +1,6 @@
--- Finds the first YouTube tab in the given browser, switches focus to it,
--- and resumes playback. Pairs with pause.applescript which silently pauses
--- without disturbing focus.
+-- Finds the first supported video tab (YouTube, TikTok, Instagram) in the
+-- given browser, switches focus to it, and resumes playback. Pairs with
+-- pause.applescript which silently pauses without disturbing focus.
 --
 -- Usage: osascript play.applescript "Google Chrome"
 -- Supports Chromium-based browsers (Chrome, Arc, Brave, Edge) and Safari.
@@ -23,9 +23,17 @@ on run argv
 	end if
 end run
 
+on isSupportedUrl(u)
+	if u contains "youtube.com" then return true
+	if u contains "tiktok.com" then return true
+	if u contains "instagram.com" then return true
+	return false
+end isSupportedUrl
+
 on playInChromium(browserName)
-	-- Pick the largest *visible* video element (Shorts pages have hidden 0x0 video
-	-- slots for ads / preloading; querySelector('video') would grab those).
+	-- Pick the largest *visible* video element. Shorts / Reels / TikTok feeds
+	-- mount multiple <video> tags including hidden 0x0 preload slots;
+	-- querySelector('video') would grab the wrong one.
 	set jsSnippet to "(function(){var v=Array.from(document.querySelectorAll('video')).filter(function(x){var r=x.getBoundingClientRect();return r.width>0&&r.height>0;}).sort(function(a,b){var ra=a.getBoundingClientRect(),rb=b.getBoundingClientRect();return rb.width*rb.height-ra.width*ra.height;})[0]||document.querySelector('video');if(v&&v.paused){v.play().catch(function(){});}return v?!v.paused:false;})();"
 	using terms from application "Google Chrome"
 		tell application browserName
@@ -36,7 +44,7 @@ on playInChromium(browserName)
 					repeat with j from 1 to tabCount
 						try
 							set tabURL to URL of tab j of window i
-							if tabURL contains "youtube.com" then
+							if my isSupportedUrl(tabURL) then
 								tell tab j of window i to execute javascript jsSnippet
 								set active tab index of window i to j
 								set index of window i to 1
@@ -60,7 +68,8 @@ on playInSafari()
 				set tabCount to count of tabs of window i
 				repeat with j from 1 to tabCount
 					try
-						if (URL of tab j of window i) contains "youtube.com" then
+						set tabURL to URL of tab j of window i
+						if my isSupportedUrl(tabURL) then
 							do JavaScript jsSnippet in tab j of window i
 							set current tab of window i to tab j of window i
 							set index of window i to 1
