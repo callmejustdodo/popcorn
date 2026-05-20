@@ -62,7 +62,6 @@ The first time the plugin controls a tab, the browser asks one more permission. 
 ## Roadmap
 
 - Codex CLI adapter (no native hooks — needs a pty / stdout watcher)
-- Multi-tab round-robin
 - Multi-agent dev support — coordinate play/pause across parallel agent sessions (cmux, Claude agents, etc.) so the video only pauses when *every* agent is idle
 - In-terminal browser support — drive a terminal-native browser (carbonyl, w3m, etc.) so the video lives inside the terminal pane instead of a separate window
 
