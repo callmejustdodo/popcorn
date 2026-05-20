@@ -5,6 +5,7 @@
 # popcorn
 
 Grab some popcorn while your CLI agent works.
+**The first brainrot CLI.**
 
 A Claude Code plugin that auto-plays your open YouTube / TikTok / Instagram tab while the agent is working and pauses it the moment the agent needs your input — then refocuses your terminal. macOS only. Works with Chrome (default), Arc, Brave, Edge, and Safari.
 
